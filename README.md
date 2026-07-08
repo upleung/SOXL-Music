@@ -1,4 +1,6 @@
-# 🎶 Solara（光域）
+# 🎶 SOXL-Music（半导体音乐）
+
+半导体音乐播放器（Semiconductor Music Player）Cloudflare Pages部署版本Web专用版
 
 > 🌐 由轻量后端服务支撑的现代化网页音乐播放器，整合多种音乐聚合接口，覆盖搜索、播放与音频下载全流程。
 
