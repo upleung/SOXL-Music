@@ -1,263 +1,283 @@
-/* * SOXL-Music Apple Pro Design System 
- * 放弃所有土气大红，采用莫兰迪蓝体系与深度毛玻璃 
+/* * SOXL-Music Apple iOS 26 Liquid Glass System
+ * 全新 Z-index 架构 & 莫兰迪色系 & 修复排版
  */
 
 :root {
-    /* 浅色模式 - 莫兰迪蓝灰体系 */
-    --bg-color: #F2F2F7; /* Apple系统默认底层灰 */
-    --surface-color: rgba(255, 255, 255, 0.65); /* 亚克力面板基色 */
+    /* 核心莫兰迪色彩系 (可通过 JS 动态修改 --primary-color) */
+    --primary-color: #007AFF; /* 默认 iOS 蓝 */
+    --primary-light: rgba(var(--primary-color-rgb), 0.15);
+    
+    /* 浅色模式液态玻璃 */
+    --bg-color: #F2F2F7; 
+    --glass-surface: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
     --text-primary: #1D1D1F;
     --text-secondary: #86868B;
-    --primary-color: #007AFF; /* Apple 系统蓝 */
-    --primary-color-hover: #0056b3;
-    --player-bar-bg: rgba(255, 255, 255, 0.75);
-    --border-color: rgba(60, 60, 67, 0.1);
     --item-hover-bg: rgba(0, 0, 0, 0.04);
-    --item-current-bg: rgba(0, 122, 255, 0.1);
-    --glass-blur: 24px;
-    --radius-lg: 16px;
-    --radius-md: 12px;
 }
 
-/* 深色模式映射 */
-.dark-mode {
+/* 深色模式 (修复日月同显问题) */
+body[data-theme="dark"] {
     --bg-color: #000000;
-    --surface-color: rgba(28, 28, 30, 0.65);
+    --glass-surface: rgba(28, 28, 30, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     --text-primary: #F5F5F7;
-    --text-secondary: #EBEBF599; /* 60% 白色 */
-    --primary-color: #0A84FF; /* Dark Mode 特供蓝 */
-    --primary-color-hover: #409CFF;
-    --player-bar-bg: rgba(30, 30, 30, 0.75);
-    --border-color: rgba(84, 84, 88, 0.65);
+    --text-secondary: #EBEBF599;
     --item-hover-bg: rgba(255, 255, 255, 0.08);
-    --item-current-bg: rgba(10, 132, 255, 0.15);
 }
+
+body[data-theme="dark"] .theme-icon--sun { display: none; }
+body[data-theme="dark"] .theme-icon--moon { display: inline-block; }
+body:not([data-theme="dark"]) .theme-icon--sun { display: inline-block; }
+body:not([data-theme="dark"]) .theme-icon--moon { display: none; }
 
 /* 基础重置 */
-* { box-sizing: border-box; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; -webkit-tap-highlight-color: transparent; outline: none;}
-body { margin: 0; background: var(--bg-color); color: var(--text-primary); transition: 0.3s ease; padding-bottom: 100px; overflow-x: hidden;}
+* { box-sizing: border-box; font-family: 'SF Pro Display', -apple-system, sans-serif; outline: none; -webkit-tap-highlight-color: transparent;}
+body { margin: 0; background: var(--bg-color); color: var(--text-primary); transition: 0.3s ease; padding-bottom: 110px; overflow-x: hidden; }
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(150,150,150,0.3); border-radius: 10px; }
-
-/* 按钮通用 */
-button { cursor: pointer; transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1); }
-button:active { transform: scale(0.95); }
-.icon-btn { background: transparent; border: none; color: var(--text-secondary); font-size: 18px; padding: 8px; border-radius: 50%; }
-.icon-btn:hover { color: var(--primary-color); background: var(--item-hover-bg); }
-.icon-btn.danger:hover { color: #FF3B30; }
-
-.action-btn { border: none; border-radius: 8px; font-weight: 600; padding: 8px 16px; font-size: 14px;}
-.primary-btn { background: var(--primary-color); color: #fff; }
-.primary-btn:hover { background: var(--primary-color-hover); box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3); }
-
-/* 主容器 */
-.app-container { max-width: 1080px; margin: 0 auto; padding: 40px 20px; }
-.apple-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-.apple-header h1 { margin: 0; font-size: 34px; font-weight: 700; letter-spacing: -0.5px; }
+::-webkit-scrollbar-thumb { background: var(--text-secondary); border-radius: 10px; opacity: 0.5;}
 
 /* ============================
-   问题1：下拉框与 UI 组件修复
+   通用液态毛玻璃组件 (Apple Style)
    ============================ */
+.glass-effect {
+    background: var(--glass-surface);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+
+button { cursor: pointer; transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
+button:active { transform: scale(0.92); }
+.icon-btn { background: transparent; border: none; color: var(--text-secondary); font-size: 18px; padding: 10px; border-radius: 50%; }
+.icon-btn:hover { color: var(--primary-color); background: var(--item-hover-bg); }
+.action-btn { border: none; border-radius: 12px; font-weight: 600; padding: 10px 20px; font-size: 14px;}
+.primary-btn { background: var(--primary-color); color: #fff; }
+.primary-btn:hover { filter: brightness(1.1); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+
+/* 主容器 */
+.app-container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+.apple-header { 
+    display: flex; justify-content: space-between; align-items: center; 
+    padding: 15px 25px; border-radius: 20px; margin-bottom: 30px; 
+}
+.apple-header h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+.header-actions { display: flex; gap: 8px; }
+
+/* ============================
+   修复问题一：下拉框溢出与排版
+   ============================ */
+.search-section { margin-bottom: 30px; }
 .search-bar-glass {
     display: flex; align-items: center; gap: 12px;
-    background: var(--surface-color);
-    backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur));
-    padding: 12px 16px; border-radius: var(--radius-lg); border: 1px solid var(--border-color);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 30px;
+    padding: 10px 15px; border-radius: 18px;
+    background: var(--glass-surface); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
 }
 .search-input { flex: 1; border: none; background: transparent; color: var(--text-primary); font-size: 16px; min-width: 0; }
-.search-input::placeholder { color: var(--text-secondary); }
 
-/* 精致的下拉框容器与绝对定位修复 */
 .dropdown-wrapper { position: relative; }
 .dropdown-btn { 
     background: var(--item-hover-bg); border: none; color: var(--text-primary);
-    padding: 8px 14px; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-weight: 500;
+    padding: 8px 16px; border-radius: 10px; display: flex; align-items: center; gap: 8px; font-weight: 500;
 }
 .dropdown-menu {
-    position: absolute; top: calc(100% + 8px); right: 0;
-    background: var(--player-bar-bg); /* 毛玻璃下拉底色 */
-    backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-    border: 1px solid var(--border-color); border-radius: var(--radius-md);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    min-width: 120px; padding: 6px;
+    position: absolute; right: 0;
+    background: var(--glass-surface); backdrop-filter: blur(30px);
+    border: 1px solid var(--glass-border); border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    min-width: 140px; padding: 8px;
     
-    /* 关键：平时隐藏，点击展示 */
-    opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95);
-    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 1000;
+    /* 修复遮挡：最高 Z-index 与状态控制 */
+    z-index: 4000; opacity: 0; visibility: hidden;
+    transform: translateY(10px) scale(0.95); transition: 0.25s ease;
 }
-.dropdown-menu.up-menu { top: auto; bottom: calc(100% + 8px); transform: translateY(10px) scale(0.95); }
+.dropdown-menu.up-menu { bottom: calc(100% + 10px); top: auto; transform: translateY(10px) scale(0.95); }
+.dropdown-menu:not(.up-menu) { top: calc(100% + 10px); }
 .dropdown-menu.show { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+
 .dropdown-item, .player-quality-menu div, .source-menu div {
-    padding: 10px 14px; font-size: 14px; color: var(--text-primary);
-    border-radius: 6px; cursor: pointer; white-space: nowrap; transition: 0.2s;
+    padding: 12px 16px; font-size: 14px; color: var(--text-primary);
+    border-radius: 8px; cursor: pointer; transition: 0.2s; font-weight: 500;
 }
-.dropdown-item:hover, .player-quality-menu div:hover, .source-menu div:hover { background: var(--primary-color); color: white; }
+.dropdown-item:hover, .player-quality-menu div:hover, .source-menu div:hover { 
+    background: var(--primary-color); color: white; 
+}
 
 /* ============================
-   问题2&3：质感修复与列表优化
+   修复问题六：列表排版 (Apple Music 化)
    ============================ */
-.playlist-section {
-    background: var(--surface-color);
-    backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px;
-    min-height: 50vh;
-}
-.playlist-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;}
-.playlist-tabs button { background: transparent; border: none; font-size: 18px; font-weight: 600; color: var(--text-secondary); margin-right: 20px;}
+.playlist-section { border-radius: 24px; padding: 25px; min-height: 55vh; }
+.playlist-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 20px;}
+.playlist-tabs button { background: transparent; border: none; font-size: 20px; font-weight: 600; color: var(--text-secondary); margin-right: 24px; padding: 0;}
 .playlist-tabs button.active { color: var(--text-primary); }
 
+.list-grid-layout { display: flex; flex-direction: column; gap: 8px; }
 .playlist-item, .search-result-item {
-    display: flex; align-items: center; padding: 14px 16px; border-radius: 10px; cursor: pointer; transition: 0.2s; border-bottom: 1px solid transparent;
+    display: flex; align-items: center; padding: 14px 18px; border-radius: 14px; 
+    cursor: pointer; transition: background 0.2s;
+    background: rgba(0,0,0,0.01); border: 1px solid transparent;
 }
-.playlist-item:hover { background: var(--item-hover-bg); }
-.playlist-item.current { background: var(--item-current-bg); }
-.playlist-item.current .playlist-item-title { color: var(--primary-color); font-weight: 600; }
-.search-result-title, .playlist-item-title { flex: 1; color: var(--text-primary); font-size: 15px;}
-.search-result-artist, .playlist-item-artist { width: 150px; color: var(--text-secondary); font-size: 13px; text-align: right;}
+.playlist-item:hover, .search-result-item:hover { background: var(--item-hover-bg); border-color: var(--glass-border);}
+.playlist-item.current { background: rgba(var(--primary-color-rgb), 0.1); border-color: var(--primary-color); }
+.playlist-item.current .playlist-item-title { color: var(--primary-color); }
+
+.search-result-title, .playlist-item-title { flex: 1; color: var(--text-primary); font-size: 16px; font-weight: 500;}
+.search-result-artist, .playlist-item-artist { width: 180px; color: var(--text-secondary); font-size: 14px; text-align: right;}
 
 /* ============================
-   底部悬浮栏 (Apple 极简设计)
+   修复问题七 & 八 & 十：沉浸式歌词页 (防穿透、大圆封面、滚动)
    ============================ */
-.apple-player-bar {
-    position: fixed; bottom: 0; left: 0; width: 100%; height: 90px;
-    background: var(--player-bar-bg);
-    backdrop-filter: blur(30px) saturate(200%); -webkit-backdrop-filter: blur(30px) saturate(200%);
-    border-top: 1px solid var(--border-color);
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 0 40px; z-index: 1000; /* 高于底层，低于全屏歌词 */
-}
-
-/* 左侧封面信息 */
-.bar-left { display: flex; align-items: center; gap: 16px; width: 30%; cursor: pointer; padding: 6px; border-radius: 12px;}
-.bar-left:hover { background: var(--item-hover-bg); }
-.cover-wrapper { width: 54px; height: 54px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
-.bar-cover { width: 100%; height: 100%; object-fit: cover; }
-.track-info { display: flex; flex-direction: column; overflow: hidden; }
-.song-title { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-.song-artist { font-size: 13px; color: var(--text-secondary); margin-top: 2px;}
-
-/* 中间控制区 */
-.bar-center { flex: 1; max-width: 500px; display: flex; flex-direction: column; align-items: center;}
-.transport-controls { display: flex; align-items: center; gap: 30px; margin-bottom: 8px;}
-.ctrl-btn { background: transparent; border: none; font-size: 20px; color: var(--text-primary);}
-.ctrl-btn:hover { color: var(--primary-color); }
-.play-btn { font-size: 24px; }
-.progress-bar-wrapper { width: 100%; display: flex; align-items: center; gap: 12px; }
-.time-text { font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
-
-/* 右侧工具区 */
-.bar-right { width: 30%; display: flex; justify-content: flex-end; align-items: center; gap: 20px; }
-.volume-control { display: flex; align-items: center; gap: 10px; color: var(--text-secondary); }
-
-/* Apple 风格滑块 */
-.apple-slider {
-    -webkit-appearance: none; width: 100%; height: 5px; border-radius: 3px;
-    background: var(--border-color); cursor: pointer; outline: none;
-}
-.apple-slider::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
-    background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.1);
-    transition: transform 0.1s;
-}
-.apple-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
-
-/* ============================
-   问题4：全屏歌词页与重叠修复
-   ============================ */
-.background-stage { position: fixed; inset: -10%; z-index: 10; pointer-events: none; opacity: 0; transition: opacity 0.5s; }
-.lyric-screen:not(.hidden) ~ .background-stage { opacity: 1; }
-.background-stage__layer { position: absolute; inset: 0; background-size: cover; background-position: center; filter: blur(80px) saturate(200%); }
-.bg-mask { position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
-
 .lyric-screen {
-    /* 绝对定位，完全覆盖 Home 页，但层级设定精妙 */
     position: fixed; inset: 0; 
-    z-index: 1500; /* 高于一切 */
-    background: transparent; 
+    z-index: 2000; /* 高于底层页面，低于控制栏 */
     transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.6s;
+    overflow: hidden;
 }
 .lyric-screen.hidden { transform: translateY(100vh); opacity: 0; pointer-events: none;}
 
+/* 防穿透的背景层 */
+.lyric-blur-bg {
+    position: absolute; inset: -10%;
+    background-size: cover; background-position: center;
+    filter: blur(80px) brightness(0.6); /* 强烈毛玻璃并压暗背景以防穿透 */
+    z-index: -1;
+}
+.lyric-blur-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: var(--bg-color); opacity: 0.7; /* 注入系统底色确保文字可读性 */
+}
+
 .lyric-close-btn { 
-    position: absolute; top: 40px; left: 40px; background: rgba(255,255,255,0.15); 
-    border: none; width: 44px; height: 44px; border-radius: 50%; color: #fff; font-size: 20px; 
-    backdrop-filter: blur(20px); z-index: 1600;
+    position: absolute; top: 50px; left: 50px; 
+    background: rgba(255,255,255,0.2); backdrop-filter: blur(20px);
+    border: none; width: 48px; height: 48px; border-radius: 50%; color: #fff; font-size: 20px; 
+    z-index: 2100;
 }
 .lyric-close-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
 
 .lyric-screen-layout {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    padding: 0 10%; gap: 10%; height: calc(100vh - 90px); /* 给底部控制条留空间 */
+    padding: 0 10%; gap: 10%; height: calc(100vh - 100px); /* 给控制栏留空间 */
 }
-.lyric-left { flex: 1; display: flex; justify-content: flex-end; }
-.lyric-left .album-cover { 
-    width: 45vh; height: 45vh; border-radius: 20px; /* 改用圆角矩形，更像 Apple Music */
-    box-shadow: 0 30px 60px rgba(0,0,0,0.4); overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
-}
-.lyric-left .album-cover img { width: 100%; height: 100%; object-fit: cover; }
 
+/* 修复八：大图静态圆形 */
+.lyric-left { flex: 1; display: flex; justify-content: flex-end; }
+.lyric-big-cover { 
+    width: 45vh; height: 45vh; border-radius: 50%; /* 圆形 */
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5); overflow: hidden; 
+    border: 12px solid rgba(255,255,255,0.1); 
+    /* 移除所有 spin 动画，保持静态 */
+}
+.lyric-big-cover img { width: 100%; height: 100%; object-fit: cover; }
+
+/* 修复十：歌词滚动与排版 */
 .lyric-right {
-    flex: 1; height: 75vh;
+    flex: 1; height: 70vh;
     mask-image: linear-gradient(180deg, transparent 0%, black 15%, black 85%, transparent 100%);
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 15%, black 85%, transparent 100%);
 }
-.lyrics-scroll { height: 100%; overflow-y: auto; padding: 35vh 0; scroll-behavior: smooth;}
+.lyrics-scroll { height: 100%; overflow-y: auto; padding: 35vh 0;}
 .lyrics-scroll::-webkit-scrollbar { display: none; }
 
-/* 逐行歌词精美排版 */
 .lyrics-content div {
-    font-size: 28px; color: rgba(255, 255, 255, 0.4); font-weight: 600;
-    margin: 28px 0; transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-    transform-origin: left center; filter: blur(1px);
+    font-size: 26px; color: rgba(255, 255, 255, 0.4); font-weight: 600;
+    margin: 32px 0; transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform-origin: left center; filter: blur(1px); cursor: pointer;
 }
-.lyrics-content div.current {
+.lyrics-content div.current, .lyrics-content div.active {
     font-size: 38px; color: #ffffff; filter: blur(0);
-    transform: scale(1.02) translateY(-2px);
+    transform: scale(1.02);
     text-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
 }
 
-/* 旋转动画 */
-.spinning { animation: rotate 20s linear infinite; }
+/* ============================
+   修复问题九：底部控制栏 (最高层级)
+   ============================ */
+.apple-player-bar {
+    position: fixed; bottom: 0; left: 0; width: 100%; height: 100px;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 40px; 
+    z-index: 3000; /* 绝对最高层级，免疫被遮挡 */
+    border-top: 1px solid var(--glass-border);
+}
+
+.bar-left { display: flex; align-items: center; gap: 15px; width: 30%; cursor: pointer; padding: 10px; border-radius: 16px;}
+.bar-left:hover { background: var(--item-hover-bg); }
+.cover-wrapper { width: 60px; height: 60px; border-radius: 50%; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.2); flex-shrink: 0;}
+.bar-cover { width: 100%; height: 100%; object-fit: cover; }
+.track-info { display: flex; flex-direction: column; overflow: hidden; }
+.song-title { font-weight: 600; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.song-artist { font-size: 13px; color: var(--text-secondary); margin-top: 4px;}
+
+.bar-center { flex: 1; max-width: 550px; display: flex; flex-direction: column; align-items: center;}
+.transport-controls { display: flex; align-items: center; gap: 35px; margin-bottom: 10px;}
+.ctrl-btn { background: transparent; border: none; font-size: 22px; color: var(--text-primary);}
+.ctrl-btn:hover { color: var(--primary-color); }
+.play-btn { font-size: 28px; color: var(--primary-color); }
+.progress-bar-wrapper { width: 100%; display: flex; align-items: center; gap: 15px; }
+.time-text { font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; font-weight: 500;}
+
+/* 苹果风滑块 */
+.apple-slider {
+    -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px;
+    background: rgba(128,128,128,0.2); cursor: pointer; outline: none;
+}
+.apple-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--primary-color); box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: 0.2s;
+}
+.apple-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+.bar-right { width: 30%; display: flex; justify-content: flex-end; align-items: center; gap: 20px; }
+.quality-btn { background: transparent; border: 1px solid var(--glass-border); color: var(--text-primary); padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;}
+.volume-control { display: flex; align-items: center; gap: 10px; color: var(--text-secondary); width: 120px;}
+.radar-btn i { font-size: 20px; color: var(--primary-color); } /* 新增雷达按钮样式 */
+
+/* 小图旋转 */
+.spinning { animation: rotate 15s linear infinite; }
 @keyframes rotate { 100% { transform: rotate(360deg); } }
 
 /* ============================
-   问题5：终极移动端适配 (拒绝乱码与错位)
+   修复问题三 & 四：方块排版设置 & 莫兰迪主题版块
    ============================ */
-@media (max-width: 820px) {
-    .app-container { padding: 20px 15px; }
-    .apple-header h1 { font-size: 28px; }
-    
-    /* 搜索框自动换行适配 */
-    .search-bar-glass { flex-wrap: wrap; padding: 12px; }
-    .search-input { width: 100%; flex: none; order: -1; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
-    
-    /* 底部控制台紧凑化 */
-    .apple-player-bar { padding: 0 15px; height: 75px; }
-    .bar-left { width: 50%; padding: 0; }
-    .cover-wrapper { width: 44px; height: 44px; }
-    .song-title { font-size: 14px; }
-    .bar-center { position: absolute; right: 15px; max-width: none; }
-    .transport-controls { gap: 15px; margin: 0; }
-    .play-btn { font-size: 20px; }
-    
-    /* 手机端隐藏进度条和功能区 */
-    .progress-bar-wrapper, .bar-right { display: none; }
-    
-    /* 全屏歌词重排为上下结构 */
-    .lyric-screen-layout { flex-direction: column; padding: 80px 20px 20px; gap: 30px; height: calc(100vh - 75px); }
-    .lyric-left { justify-content: center; flex: none; }
-    .lyric-left .album-cover { width: 65vw; height: 65vw; border-radius: 16px; }
-    .lyric-right { width: 100%; height: 50vh; }
-    .lyrics-content div { font-size: 20px; text-align: center; transform-origin: center;}
-    .lyrics-content div.current { font-size: 26px; }
-    .lyric-close-btn { top: 20px; left: 20px; width: 36px; height: 36px; }
-}
-
-/* 弹窗样式 */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);}
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 5000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px);}
 .modal-overlay:not([aria-hidden="true"]) { display: flex; }
-.modal-content { background: var(--surface-color); padding: 24px; border-radius: var(--radius-lg); width: 320px; text-align: center;}
-.notification { position: fixed; top: -50px; left: 50%; transform: translateX(-50%); background: var(--text-primary); color: var(--bg-color); padding: 10px 20px; border-radius: 20px; transition: 0.3s; z-index: 9999; font-weight: 500;}
-.notification.show { top: 40px; }
+.modal-content { width: 400px; max-width: 90%; padding: 30px; border-radius: 24px; text-align: left;}
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px;}
+.modal-header h2 { margin: 0; font-size: 22px; font-weight: 700; }
+
+/* 设置区方块网格 (修复排版太乱) */
+.setting-title { font-size: 16px; color: var(--text-secondary); margin-bottom: 15px;}
+.block-layout {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px;
+}
+/* 这里兼容 index.js 自动生成的 checkbox */
+.block-layout label {
+    display: flex; align-items: center; justify-content: center;
+    padding: 12px; background: var(--item-hover-bg); border-radius: 12px;
+    cursor: pointer; border: 1px solid var(--glass-border); transition: 0.2s; font-weight: 500;
+}
+.block-layout label:hover { border-color: var(--primary-color); }
+.modal-footer { margin-top: 25px; text-align: right; }
+
+/* 莫兰迪主题色块 */
+.theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; justify-items: center; }
+.theme-color-item {
+    width: 60px; height: 60px; border-radius: 20px; background: var(--t-color);
+    cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: relative;
+}
+.theme-color-item:hover { transform: scale(1.1); }
+.theme-color-item.active { border: 4px solid var(--text-primary); transform: scale(1.05);}
+
+/* 移动端适配 */
+@media (max-width: 820px) {
+    .apple-player-bar { padding: 0 15px; height: 80px; }
+    .bar-left { width: 60%; padding: 0; }
+    .bar-center, .bar-right { display: none; /* 移动端隐藏过多控件 */ }
+    .lyric-screen-layout { flex-direction: column; padding: 80px 20px 20px; gap: 20px; }
+    .lyric-big-cover { width: 65vw; height: 65vw; }
+}
