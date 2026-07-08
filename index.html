@@ -7,9 +7,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/i18n.js"></script>
 </head>
 <body>
     <div class="app-container" id="mainContainer">
@@ -21,6 +24,7 @@
                     <i class="fas fa-sun theme-icon theme-icon--sun"></i>
                     <i class="fas fa-moon theme-icon theme-icon--moon"></i>
                 </button>
+                <button id="openSettingsBtn" class="icon-btn" title="偏好设置"><i class="fas fa-sliders-h"></i></button>
             </div>
         </header>
 
@@ -39,7 +43,6 @@
                     <div id="sourceMenu" class="dropdown-menu">
                         <div data-val="netease">网易云音乐</div>
                         <div data-val="kuwo">酷我音乐</div>
-                        <div data-val="joox">JOOX音乐</div>
                         <div data-val="bilibili">哔哩哔哩</div>
                     </div>
                 </div>
@@ -53,20 +56,37 @@
         </section>
 
         <section class="playlist-section glass-effect" id="playlistSectionWrapper">
-            <div class="playlist active" id="playlist">
+            <div class="playlist active empty" id="playlist" role="tabpanel">
                 <div class="playlist-header">
                     <div class="playlist-tabs">
-                        <button class="playlist-tab active">播放队列</button>
+                        <button id="playlistTab" class="playlist-tab active" data-target="playlist">播放队列</button>
+                        <button id="favoritesTab" class="playlist-tab" data-target="favorites">我的收藏</button>
                     </div>
                     <div class="playlist-actions">
-                        <button class="icon-btn" id="importPlaylistBtn" title="导入歌单"><i class="fas fa-arrow-down-to-bracket"></i></button>
-                        <button class="icon-btn" id="exportPlaylistBtn" title="导出歌单"><i class="fas fa-arrow-up-from-bracket"></i></button>
-                        <button class="icon-btn danger" id="clearPlaylistBtn" title="清空"><i class="fas fa-trash-alt"></i></button>
+                        <input id="importPlaylistInput" type="file" accept="application/json" hidden />
+                        <button class="icon-btn" id="importPlaylistBtn" title="导入配置"><i class="fas fa-arrow-down-to-bracket"></i></button>
+                        <button class="icon-btn" id="exportPlaylistBtn" title="导出配置"><i class="fas fa-arrow-up-from-bracket"></i></button>
+                        <button class="icon-btn danger" id="clearPlaylistBtn" onclick="clearPlaylist()" title="清空"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </div>
-                <div class="playlist-scroll">
-                    <div class="playlist-items list-grid-layout" id="playlistItems"></div>
+                <div class="playlist-scroll"><div class="playlist-items list-grid-layout" id="playlistItems"></div></div>
+            </div>
+
+            <div class="playlist favorites empty" id="favorites" role="tabpanel" hidden>
+                <div class="playlist-header">
+                    <div class="playlist-tabs">
+                        <button id="playlistTabSecondary" class="playlist-tab active" data-target="playlist">播放队列</button>
+                        <button id="favoritesTabSecondary" class="playlist-tab" data-target="favorites">我的收藏</button>
+                    </div>
+                    <div class="playlist-actions">
+                        <button class="icon-btn" id="addAllFavoritesBtn"><i class="fas fa-plus-circle"></i></button>
+                        <input id="importFavoritesInput" type="file" accept="application/json" hidden />
+                        <button class="icon-btn" id="importFavoritesBtn" title="导入收藏"><i class="fas fa-arrow-down-to-bracket"></i></button>
+                        <button class="icon-btn" id="exportFavoritesBtn" title="导出收藏"><i class="fas fa-arrow-up-from-bracket"></i></button>
+                        <button class="icon-btn danger" id="clearFavoritesBtn" title="清空收藏"><i class="fas fa-trash-alt"></i></button>
+                    </div>
                 </div>
+                <div class="playlist-scroll"><div class="playlist-items list-grid-layout" id="favoriteItems"></div></div>
             </div>
         </section>
     </div>
@@ -74,12 +94,13 @@
     <div class="lyric-screen hidden" id="lyricScreen">
         <div class="lyric-blur-bg" id="lyricBlurBg"></div>
         <button id="closeLyricBtn" class="lyric-close-btn" title="收起"><i class="fas fa-chevron-down"></i></button>
+        
         <div class="lyric-screen-layout">
             <div class="lyric-left">
                 <div class="lyric-big-cover"><img id="bigCoverImg" src="favicon.png" alt="cover"></div>
             </div>
             <div class="lyric-right">
-                <div class="lyrics" id="lyrics">
+                <div class="lyrics empty" id="lyrics" data-placeholder="default">
                     <div class="lyrics-scroll" id="lyricsScroll">
                         <div class="lyrics-content" id="lyricsContent"></div>
                     </div>
@@ -89,11 +110,12 @@
     </div>
 
     <footer class="apple-player-bar glass-effect">
-        <div class="bar-left" id="openLyricBtn" title="打开歌词">
+        <div class="bar-left" id="openLyricBtn" title="打开歌词面板">
             <div class="cover-wrapper"><img id="barCoverImg" src="favicon.png" class="bar-cover" /></div>
             <div class="track-info">
                 <div class="title-row">
                     <span id="currentSongTitle" class="song-title">未在播放</span>
+                    <button class="favorite-toggle" id="currentFavoriteToggle"><i class="far fa-heart"></i></button>
                 </div>
                 <span id="currentSongArtist" class="song-artist">SOXL Music</span>
             </div>
@@ -102,14 +124,14 @@
         <div class="bar-center">
             <div class="transport-controls">
                 <button id="playModeBtn" class="ctrl-btn" title="列表循环"><i class="fas fa-repeat"></i></button>
-                <button id="prevBtn" class="ctrl-btn"><i class="fas fa-backward-step"></i></button>
+                <button onclick="playPrevious()" class="ctrl-btn"><i class="fas fa-backward-step"></i></button>
                 <button id="playPauseBtn" class="ctrl-btn play-btn"><i class="fas fa-play"></i></button>
-                <button id="nextBtn" class="ctrl-btn"><i class="fas fa-forward-step"></i></button>
+                <button onclick="playNext()" class="ctrl-btn"><i class="fas fa-forward-step"></i></button>
                 <button id="shuffleToggleBtn" class="ctrl-btn" title="随机播放"><i class="fas fa-shuffle"></i></button>
             </div>
             <div class="progress-bar-wrapper">
                 <span id="currentTimeDisplay" class="time-text">00:00</span>
-                <input type="range" id="progressBar" class="apple-slider" min="0" max="100" step="0.1" value="0">
+                <input type="range" id="progressBar" class="apple-slider" min="0" max="0" step="0.1" value="0">
                 <span id="durationDisplay" class="time-text">00:00</span>
             </div>
         </div>
@@ -120,10 +142,10 @@
             <div class="dropdown-wrapper quality-dropdown">
                 <button id="qualityToggle" class="quality-btn"><span id="qualityLabel">极高音质</span> <i class="fas fa-angle-up"></i></button>
                 <div id="playerQualityMenu" class="dropdown-menu up-menu">
-                    <div data-val="128">标准音质</div>
-                    <div data-val="192">高品音质</div>
-                    <div data-val="320">极高音质</div>
-                    <div data-val="999">无损音质</div>
+                    <div data-val="1">标准音质</div>
+                    <div data-val="2">较高音质</div>
+                    <div data-val="3">极高音质</div>
+                    <div data-val="4">无损音质</div>
                 </div>
             </div>
             
@@ -133,6 +155,20 @@
             </div>
         </div>
     </footer>
+
+    <div id="settingsModal" class="modal-overlay glass-overlay" aria-hidden="true">
+        <div class="modal-content glass-effect">
+            <div class="modal-header">
+                <h2>探索雷达配置</h2>
+                <button id="closeSettingsBtn" class="icon-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="setting-title">请勾选您喜欢的风格，雷达将据此推荐音乐：</p>
+                <div id="radarGenreList" class="genre-grid block-layout"></div>
+            </div>
+            <div class="modal-footer"><button id="saveSettingsBtn" class="action-btn primary-btn">保存并启用雷达</button></div>
+        </div>
+    </div>
 
     <div id="paletteModal" class="modal-overlay glass-overlay" aria-hidden="true">
         <div class="modal-content glass-effect palette-content">
@@ -151,8 +187,13 @@
         </div>
     </div>
 
-    <div id="notification" style="display:none !important;"></div>
     <audio id="audioPlayer" preload="metadata" playsinline></audio>
+    <div style="display:none;" id="albumCover"></div>
+    <div style="display:none;">
+        <button id="loadOnlineBtn"></button>
+        <button id="mobileQueueToggle"></button>
+        <button id="mobileSearchToggle"></button>
+        <div id="notification"></div> </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/index.js"></script>
