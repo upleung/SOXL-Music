@@ -1,0 +1,20 @@
+# Git
+.git
+.github
+
+# Node 依赖（server 的 standalone 方案，不在新 Docker 中使用）
+server/node_modules
+node_modules
+
+# 运行时数据（通过 volume 挂载，不应打包进镜像）
+data
+*.db
+*.db-shm
+*.db-wal
+
+# 敏感配置（运行时由 entrypoint 动态生成）
+.dev.vars
+
+# 系统文件
+.DS_Store
+Thumbs.db
