@@ -2,14 +2,14 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>SOXL-Music</title>
-    <meta name="apple-mobile-web-app-title" content="SOXL-Music">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>SOXL-Music Pro</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/i18n.js"></script>
@@ -21,55 +21,48 @@
         <div class="bg-mask"></div>
     </div>
 
-    <div class="container main-view" id="mainContainer">
-        <div class="header alger-header">
-            <h1>SOXL-Music</h1>
-            <div class="header-left-controls">
-                <button id="themeToggleButton" class="theme-toggle-button" type="button"><i class="fas fa-sun theme-icon theme-icon--sun"></i><i class="fas fa-moon theme-icon theme-icon--moon"></i></button>
+    <div class="app-container" id="mainContainer">
+        <header class="apple-header">
+            <h1>SOXL</h1>
+            <div class="header-actions">
+                <button id="themeToggleButton" class="icon-btn" title="切换深浅色">
+                    <i class="fas fa-sun theme-icon theme-icon--sun"></i>
+                    <i class="fas fa-moon theme-icon theme-icon--moon"></i>
+                </button>
+                <button id="openSettingsBtn" class="icon-btn" title="系统设置"><i class="fas fa-cog"></i></button>
             </div>
-            <div class="theme-switch-wrapper">
-                <button id="openSettingsBtn" class="theme-toggle-button" type="button"><i class="fas fa-cog"></i></button>
-            </div>
-        </div>
+        </header>
 
-        <div class="search-area" id="searchArea">
-            <div class="search-controls-wrapper">
-                <div class="search-bar-unified">
-                    <div class="search-input-wrapper">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="searchInput" class="search-input" placeholder="搜索歌曲、歌手或专辑...">
-                    </div>
-                    <div class="source-select-wrapper" id="sourceSelectWrapper">
-                        <button id="sourceSelectButton" class="source-select-btn"><span id="sourceSelectLabel">网易云</span><i class="fas fa-chevron-down caret-icon"></i></button>
-                        <div id="sourceMenu" class="source-menu"></div>
-                    </div>
+        <section class="search-section" id="searchArea">
+            <div class="search-bar-glass">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索你喜欢的音乐、歌手...">
+                
+                <div class="dropdown-wrapper" id="sourceSelectWrapper">
+                    <button id="sourceSelectButton" class="dropdown-btn">
+                        <span id="sourceSelectLabel">网易云</span>
+                        <i class="fas fa-chevron-down caret-icon"></i>
+                    </button>
+                    <div id="sourceMenu" class="dropdown-menu"></div>
                 </div>
-                <button id="searchBtn" class="search-btn"><i class="fas fa-search"></i></button>
-                <div class="search-results-toolbar">
-                    <div class="import-dropdown">
-                        <button class="import-selected-btn" id="importSelectedBtn" disabled><i class="fas fa-file-import"></i> <span id="importSelectedCount"></span></button>
-                        <div class="import-dropdown-menu" id="importSelectedMenu" hidden>
-                            <button class="import-dropdown-item" id="importToPlaylist">导入到播放列表</button>
-                            <button class="import-dropdown-item" id="importToFavorites">导入到收藏列表</button>
-                        </div>
-                    </div>
-                </div>
+                <button id="searchBtn" class="action-btn primary-btn">搜索</button>
             </div>
+            
             <div id="searchResults" class="search-results"><div id="searchResultsList" class="search-results-list"></div></div>
-        </div>
+        </section>
 
-        <div class="main-content">
+        <section class="playlist-section">
             <div class="playlist active empty" id="playlist" role="tabpanel">
                 <div class="playlist-header">
                     <div class="playlist-tabs">
-                        <button id="playlistTab" class="playlist-tab active" data-target="playlist">播放列表</button>
-                        <button id="favoritesTab" class="playlist-tab" data-target="favorites">收藏列表</button>
+                        <button id="playlistTab" class="playlist-tab active" data-target="playlist">播放队列</button>
+                        <button id="favoritesTab" class="playlist-tab" data-target="favorites">我的收藏</button>
                     </div>
-                    <div class="playlist-actions-tray">
+                    <div class="playlist-actions">
                         <input id="importPlaylistInput" type="file" accept="application/json" hidden />
-                        <button class="playlist-action-btn" id="importPlaylistBtn"><i class="fas fa-file-import"></i></button>
-                        <button class="playlist-action-btn" id="exportPlaylistBtn"><i class="fas fa-file-export"></i></button>
-                        <button class="playlist-action-btn" id="clearPlaylistBtn" onclick="clearPlaylist()"><i class="fas fa-trash"></i></button>
+                        <button class="icon-btn" id="importPlaylistBtn" title="导入配置"><i class="fas fa-folder-open"></i></button>
+                        <button class="icon-btn" id="exportPlaylistBtn" title="导出配置"><i class="fas fa-share-square"></i></button>
+                        <button class="icon-btn danger" id="clearPlaylistBtn" onclick="clearPlaylist()" title="清空"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </div>
                 <div class="playlist-scroll"><div class="playlist-items" id="playlistItems"></div></div>
@@ -78,24 +71,24 @@
             <div class="playlist favorites empty" id="favorites" role="tabpanel" hidden>
                 <div class="playlist-header">
                     <div class="playlist-tabs">
-                        <button id="playlistTabSecondary" class="playlist-tab active" data-target="playlist">播放列表</button>
-                        <button id="favoritesTabSecondary" class="playlist-tab" data-target="favorites">收藏列表</button>
+                        <button id="playlistTabSecondary" class="playlist-tab active" data-target="playlist">播放队列</button>
+                        <button id="favoritesTabSecondary" class="playlist-tab" data-target="favorites">我的收藏</button>
                     </div>
-                    <div class="playlist-actions-tray">
-                        <button class="playlist-action-btn" id="addAllFavoritesBtn"><i class="fas fa-plus-circle"></i></button>
+                    <div class="playlist-actions">
+                        <button class="icon-btn" id="addAllFavoritesBtn"><i class="fas fa-plus-circle"></i></button>
                         <input id="importFavoritesInput" type="file" accept="application/json" hidden />
-                        <button class="playlist-action-btn" id="importFavoritesBtn"><i class="fas fa-file-import"></i></button>
-                        <button class="playlist-action-btn" id="exportFavoritesBtn"><i class="fas fa-file-export"></i></button>
-                        <button class="playlist-action-btn" id="clearFavoritesBtn"><i class="fas fa-trash"></i></button>
+                        <button class="icon-btn" id="importFavoritesBtn"><i class="fas fa-folder-open"></i></button>
+                        <button class="icon-btn" id="exportFavoritesBtn"><i class="fas fa-share-square"></i></button>
+                        <button class="icon-btn danger" id="clearFavoritesBtn"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </div>
                 <div class="playlist-scroll"><div class="playlist-items" id="favoriteItems"></div></div>
             </div>
-        </div>
+        </section>
     </div>
 
     <div class="lyric-screen hidden" id="lyricScreen">
-        <button id="closeLyricBtn" class="lyric-close-btn"><i class="fas fa-chevron-down"></i></button>
+        <button id="closeLyricBtn" class="lyric-close-btn" title="收起"><i class="fas fa-chevron-down"></i></button>
         <div class="lyric-screen-layout">
             <div class="lyric-left">
                 <div class="album-cover" id="albumCover">
@@ -112,71 +105,63 @@
         </div>
     </div>
 
-    <div class="player-bar">
-        <div class="player-bar-left" id="openLyricBtn" title="展开歌词界面">
-            <div class="bar-cover-wrapper">
-                <img id="barCoverImg" src="favicon.png" class="bar-cover" />
-            </div>
-            <div class="bar-info">
-                <div class="bar-title-row">
-                    <span id="currentSongTitle" class="bar-title">选择歌曲</span>
+    <footer class="apple-player-bar">
+        <div class="bar-left" id="openLyricBtn" title="打开沉浸式播放器">
+            <div class="cover-wrapper"><img id="barCoverImg" src="favicon.png" class="bar-cover" /></div>
+            <div class="track-info">
+                <div class="title-row">
+                    <span id="currentSongTitle" class="song-title">未在播放</span>
                     <button class="favorite-toggle" id="currentFavoriteToggle"><i class="far fa-heart"></i></button>
                 </div>
-                <span id="currentSongArtist" class="bar-artist">未知艺术家</span>
+                <span id="currentSongArtist" class="song-artist">Apple Design</span>
             </div>
         </div>
         
-        <div class="player-bar-center">
+        <div class="bar-center">
             <div class="transport-controls">
                 <button id="playModeBtn" class="ctrl-btn"><i class="fas fa-repeat"></i></button>
                 <button onclick="playPrevious()" class="ctrl-btn"><i class="fas fa-backward-step"></i></button>
                 <button id="playPauseBtn" class="ctrl-btn play-btn"><i class="fas fa-play"></i></button>
                 <button onclick="playNext()" class="ctrl-btn"><i class="fas fa-forward-step"></i></button>
-                <button id="shuffleToggleBtn" class="ctrl-btn"><i class="fas fa-shuffle"></i></button>
+                <button id="shuffleToggleBtn" class="ctrl-btn"><i class="fas fa-random"></i></button>
             </div>
-            <div class="progress-container">
-                <span id="currentTimeDisplay">00:00</span>
-                <input type="range" id="progressBar" min="0" max="0" step="0.1" value="0">
-                <span id="durationDisplay">00:00</span>
+            <div class="progress-bar-wrapper">
+                <span id="currentTimeDisplay" class="time-text">00:00</span>
+                <input type="range" id="progressBar" class="apple-slider" min="0" max="0" step="0.1" value="0">
+                <span id="durationDisplay" class="time-text">00:00</span>
             </div>
         </div>
 
-        <div class="player-bar-right">
-            <div class="player-quality">
-                <button id="qualityToggle" class="quality-btn"><span id="qualityLabel">极高音质</span></button>
-                <div id="playerQualityMenu" class="player-quality-menu"></div>
+        <div class="bar-right">
+            <div class="dropdown-wrapper quality-dropdown">
+                <button id="qualityToggle" class="quality-btn"><span id="qualityLabel">极高</span></button>
+                <div id="playerQualityMenu" class="dropdown-menu up-menu"></div>
             </div>
-            <div class="volume-container">
+            <div class="volume-control">
                 <i id="volumeIcon" class="fas fa-volume-up"></i>
-                <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.8">
+                <input type="range" id="volumeSlider" class="apple-slider" min="0" max="1" step="0.01" value="0.8">
             </div>
         </div>
-    </div>
+    </footer>
 
     <audio id="audioPlayer" preload="metadata" playsinline></audio>
     <div id="settingsModal" class="modal-overlay" aria-hidden="true">
-        <div class="modal-content settings-content">
+        <div class="modal-content">
             <div class="modal-header">
-                <h2>设置</h2>
-                <button id="closeSettingsBtn" class="close-modal-btn" aria-label="关闭设置"><i class="fas fa-times"></i></button>
+                <h2>偏好设置</h2>
+                <button id="closeSettingsBtn" class="icon-btn"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
-                <section class="settings-section">
-                    <h3>探索雷达风格</h3>
-                    <p class="settings-hint">选择您喜欢的音乐风格，探索雷达将从中为您推荐歌曲。</p>
-                    <div id="radarGenreList" class="genre-grid"></div>
-                </section>
+                <div id="radarGenreList" class="genre-grid"></div>
             </div>
-            <div class="modal-footer">
-                <button id="saveSettingsBtn" class="save-settings-btn">保存设置</button>
-            </div>
+            <div class="modal-footer"><button id="saveSettingsBtn" class="action-btn primary-btn">完成</button></div>
         </div>
     </div>
     <div id="notification" class="notification"></div>
-    <div id="debugInfo" class="debug-info"></div>
+    <div id="debugInfo" class="debug-info" style="display:none;"></div>
 
     <div style="display:none;">
-        <button id="loadOnlineBtn"><span class="btn-text"></span><span class="loader"></span></button>
+        <button id="loadOnlineBtn"></button>
         <button id="mobileQueueToggle"></button>
         <button id="mobileSearchToggle"></button>
         <button id="mobileExploreButton"></button>
@@ -204,25 +189,43 @@
     
     <script>
     document.addEventListener("DOMContentLoaded", () => {
+        // --- 1. 沉浸式歌词面板控制 ---
         const lyricScreen = document.getElementById("lyricScreen");
-        const openBtn = document.getElementById("openLyricBtn");
-        const closeBtn = document.getElementById("closeLyricBtn");
+        document.getElementById("openLyricBtn").addEventListener("click", (e) => {
+            if(e.target.closest('.favorite-toggle')) return; 
+            lyricScreen.classList.remove("hidden");
+        });
+        document.getElementById("closeLyricBtn").addEventListener("click", () => {
+            lyricScreen.classList.add("hidden");
+        });
+
+        // --- 2. 下拉框行为修复 (点击外部自动关闭) ---
+        const toggleDropdown = (btnId, menuId) => {
+            const btn = document.getElementById(btnId);
+            const menu = document.getElementById(menuId);
+            if(!btn || !menu) return;
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.dropdown-menu').forEach(m => {
+                    if(m !== menu) m.classList.remove('show');
+                });
+                menu.classList.toggle('show');
+            });
+        };
+        toggleDropdown("sourceSelectButton", "sourceMenu");
+        toggleDropdown("qualityToggle", "playerQualityMenu");
+        
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('.dropdown-wrapper')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('show'));
+            }
+        });
+
+        // --- 3. 封面旋转动画同步 ---
         const albumCover = document.getElementById("albumCover");
         const barCoverImg = document.getElementById("barCoverImg");
         const audio = document.getElementById("audioPlayer");
 
-        // 1. 展开/收起沉浸式歌词面板
-        openBtn.addEventListener("click", (e) => {
-            if(e.target.closest('.favorite-toggle')) return; 
-            lyricScreen.classList.remove("hidden");
-            document.body.style.overflow = "hidden";
-        });
-        closeBtn.addEventListener("click", () => {
-            lyricScreen.classList.add("hidden");
-            document.body.style.overflow = "";
-        });
-
-        // 2. 封面同步与旋转动画逻辑
         const observer = new MutationObserver(() => {
             const img = albumCover.querySelector("img");
             if (img && img.src) barCoverImg.src = img.src;
@@ -240,7 +243,35 @@
         };
         audio.addEventListener("play", toggleSpin);
         audio.addEventListener("pause", toggleSpin);
-        audio.addEventListener("timeupdate", toggleSpin); // 强制校验
+
+        // --- 4. 【关键修复】逐行歌词自动跟随滚动 ---
+        const lyricsContent = document.getElementById('lyricsContent');
+        const lyricsScroll = document.getElementById('lyricsScroll');
+        
+        if (lyricsContent && lyricsScroll) {
+            // 监听歌词容器内部 DOM class 的变化
+            const lyricObserver = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === 'class') {
+                        const target = mutation.target;
+                        // 找到被加上高亮类的当前歌词行（原代码可能用 current 或 active）
+                        if (target.classList.contains('current') || target.classList.contains('active')) {
+                            // 核心：平滑滚动到屏幕中心
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        }
+                    }
+                });
+            });
+            // 监听所有子元素（即每一行歌词）的属性变化
+            lyricObserver.observe(lyricsContent, {
+                attributes: true,
+                subtree: true,
+                attributeFilter: ['class']
+            });
+        }
     });
     </script>
 </body>
