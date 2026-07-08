@@ -85,7 +85,7 @@ SOXL-Music/
 
 ## ⚠️ 免责声明
 
-1. 本项目 API 完全免费，数据来源于 [GD音乐台 (music.gdstudio.xyz)](https://music.gdstudio.xyz)。
+1. 本项目 API 完全开源，数据来源于 [GD音乐台 (music.gdstudio.xyz)](https://music.gdstudio.xyz)。
 2. 本项目**仅供前端代码学习、UI/UX 设计交流及个人研究使用**，未进行任何商业化运营。
 3. **请尊重版权，支持正版音乐噢！**
 
