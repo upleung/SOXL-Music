@@ -4,6 +4,14 @@
 > SOXL Music 是一款致力于提供极致视觉体验的纯静态 Web 音乐播放器。它彻底摒弃了臃肿的 Node.js 或 Serverless 后端依赖，完全依靠前端引擎直接调用公开 API。
 > 它拥有极度丝滑的阻尼歌词滚动、无缝音质切换、高级的“空气感”卡片排版，以及完全自定义的莫兰迪色系主题。只需部署到任何静态页面托管服务（如 Cloudflare Pages, GitHub Pages），即可随时随地享受沉浸式的音乐体验。（原名Semiconductor Music Player）
 
+<br>![截图](https://github.com/upleung/SOXL-Music/blob/main/img/WebScr1.png)<br>
+<br>![截图](https://github.com/upleung/SOXL-Music/blob/main/img/WebScr2.png)<br>
+<br>![截图](https://github.com/upleung/SOXL-Music/blob/main/img/WebScr3.png)<br>
+<br>![截图](https://github.com/upleung/SOXL-Music/blob/main/img/WebScr4.png)<br>
+<br>![截图](https://github.com/upleung/SOXL-Music/blob/main/img/WebScr5.png)<br>
+<br>![截图](https://github.com/upleung/SOXL-Music/blob/main/img/WebScr6.png)<br>
+
+
 ## 🌟 核心特性
 
 * 🍎 **极致视觉 (Apple Liquid Glass UI)**：深度还原 iOS 液态毛玻璃与全局亚克力面板，拥有完美的景深防穿透设计和极具呼吸感的卡片排版。
