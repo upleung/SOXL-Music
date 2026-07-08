@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SOXL-Music Pro</title>
+    <title>SOXL Music Player</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
@@ -15,28 +15,23 @@
     <script src="js/i18n.js"></script>
 </head>
 <body>
-    <div class="background-stage" id="backgroundStage" aria-hidden="true">
-        <div class="background-stage__layer background-stage__layer--base" id="backgroundBaseLayer"></div>
-        <div class="background-stage__layer background-stage__layer--transition" id="backgroundTransitionLayer"></div>
-        <div class="bg-mask"></div>
-    </div>
-
     <div class="app-container" id="mainContainer">
-        <header class="apple-header">
-            <h1>SOXL</h1>
+        <header class="apple-header glass-effect">
+            <h1>SOXL Music Player</h1>
             <div class="header-actions">
+                <button id="openPaletteBtn" class="icon-btn" title="个性化主题"><i class="fas fa-palette"></i></button>
                 <button id="themeToggleButton" class="icon-btn" title="切换深浅色">
                     <i class="fas fa-sun theme-icon theme-icon--sun"></i>
                     <i class="fas fa-moon theme-icon theme-icon--moon"></i>
                 </button>
-                <button id="openSettingsBtn" class="icon-btn" title="系统设置"><i class="fas fa-cog"></i></button>
+                <button id="openSettingsBtn" class="icon-btn" title="偏好设置"><i class="fas fa-sliders-h"></i></button>
             </div>
         </header>
 
         <section class="search-section" id="searchArea">
             <div class="search-bar-glass">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="搜索你喜欢的音乐、歌手...">
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索你喜欢的音乐、歌手、专辑...">
                 
                 <div class="dropdown-wrapper" id="sourceSelectWrapper">
                     <button id="sourceSelectButton" class="dropdown-btn">
@@ -45,13 +40,13 @@
                     </button>
                     <div id="sourceMenu" class="dropdown-menu"></div>
                 </div>
-                <button id="searchBtn" class="action-btn primary-btn">搜索</button>
+                <button id="searchBtn" class="action-btn primary-btn">搜 索</button>
             </div>
             
-            <div id="searchResults" class="search-results"><div id="searchResultsList" class="search-results-list"></div></div>
+            <div id="searchResults" class="search-results"><div id="searchResultsList" class="search-results-list list-grid-layout"></div></div>
         </section>
 
-        <section class="playlist-section">
+        <section class="playlist-section glass-effect">
             <div class="playlist active empty" id="playlist" role="tabpanel">
                 <div class="playlist-header">
                     <div class="playlist-tabs">
@@ -60,12 +55,12 @@
                     </div>
                     <div class="playlist-actions">
                         <input id="importPlaylistInput" type="file" accept="application/json" hidden />
-                        <button class="icon-btn" id="importPlaylistBtn" title="导入配置"><i class="fas fa-folder-open"></i></button>
-                        <button class="icon-btn" id="exportPlaylistBtn" title="导出配置"><i class="fas fa-share-square"></i></button>
+                        <button class="icon-btn" id="importPlaylistBtn" title="导入"><i class="fas fa-file-import"></i></button>
+                        <button class="icon-btn" id="exportPlaylistBtn" title="导出"><i class="fas fa-file-export"></i></button>
                         <button class="icon-btn danger" id="clearPlaylistBtn" onclick="clearPlaylist()" title="清空"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </div>
-                <div class="playlist-scroll"><div class="playlist-items" id="playlistItems"></div></div>
+                <div class="playlist-scroll"><div class="playlist-items list-grid-layout" id="playlistItems"></div></div>
             </div>
 
             <div class="playlist favorites empty" id="favorites" role="tabpanel" hidden>
@@ -77,22 +72,23 @@
                     <div class="playlist-actions">
                         <button class="icon-btn" id="addAllFavoritesBtn"><i class="fas fa-plus-circle"></i></button>
                         <input id="importFavoritesInput" type="file" accept="application/json" hidden />
-                        <button class="icon-btn" id="importFavoritesBtn"><i class="fas fa-folder-open"></i></button>
-                        <button class="icon-btn" id="exportFavoritesBtn"><i class="fas fa-share-square"></i></button>
-                        <button class="icon-btn danger" id="clearFavoritesBtn"><i class="fas fa-trash-alt"></i></button>
+                        <button class="icon-btn" id="importFavoritesBtn" title="导入收藏"><i class="fas fa-file-import"></i></button>
+                        <button class="icon-btn" id="exportFavoritesBtn" title="导出收藏"><i class="fas fa-file-export"></i></button>
+                        <button class="icon-btn danger" id="clearFavoritesBtn" title="清空收藏"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </div>
-                <div class="playlist-scroll"><div class="playlist-items" id="favoriteItems"></div></div>
+                <div class="playlist-scroll"><div class="playlist-items list-grid-layout" id="favoriteItems"></div></div>
             </div>
         </section>
     </div>
 
     <div class="lyric-screen hidden" id="lyricScreen">
-        <button id="closeLyricBtn" class="lyric-close-btn" title="收起"><i class="fas fa-chevron-down"></i></button>
+        <div class="lyric-blur-bg" id="lyricBlurBg"></div> <button id="closeLyricBtn" class="lyric-close-btn" title="收起"><i class="fas fa-chevron-down"></i></button>
+        
         <div class="lyric-screen-layout">
             <div class="lyric-left">
-                <div class="album-cover" id="albumCover">
-                    <div class="placeholder"><i class="fas fa-music"></i></div>
+                <div class="lyric-big-cover">
+                    <img id="bigCoverImg" src="favicon.png" alt="cover">
                 </div>
             </div>
             <div class="lyric-right">
@@ -105,15 +101,15 @@
         </div>
     </div>
 
-    <footer class="apple-player-bar">
-        <div class="bar-left" id="openLyricBtn" title="打开沉浸式播放器">
+    <footer class="apple-player-bar glass-effect">
+        <div class="bar-left" id="openLyricBtn" title="打开歌词面板">
             <div class="cover-wrapper"><img id="barCoverImg" src="favicon.png" class="bar-cover" /></div>
             <div class="track-info">
                 <div class="title-row">
                     <span id="currentSongTitle" class="song-title">未在播放</span>
                     <button class="favorite-toggle" id="currentFavoriteToggle"><i class="far fa-heart"></i></button>
                 </div>
-                <span id="currentSongArtist" class="song-artist">Apple Design</span>
+                <span id="currentSongArtist" class="song-artist">SOXL Music</span>
             </div>
         </div>
         
@@ -133,10 +129,13 @@
         </div>
 
         <div class="bar-right">
+            <button class="icon-btn radar-btn" title="音乐雷达"><i class="fas fa-broadcast-tower"></i></button>
+            
             <div class="dropdown-wrapper quality-dropdown">
-                <button id="qualityToggle" class="quality-btn"><span id="qualityLabel">极高</span></button>
+                <button id="qualityToggle" class="quality-btn"><span id="qualityLabel">极高</span> <i class="fas fa-angle-up"></i></button>
                 <div id="playerQualityMenu" class="dropdown-menu up-menu"></div>
             </div>
+            
             <div class="volume-control">
                 <i id="volumeIcon" class="fas fa-volume-up"></i>
                 <input type="range" id="volumeSlider" class="apple-slider" min="0" max="1" step="0.01" value="0.8">
@@ -144,22 +143,41 @@
         </div>
     </footer>
 
-    <audio id="audioPlayer" preload="metadata" playsinline></audio>
-    <div id="settingsModal" class="modal-overlay" aria-hidden="true">
-        <div class="modal-content">
+    <div id="settingsModal" class="modal-overlay glass-overlay" aria-hidden="true">
+        <div class="modal-content glass-effect">
             <div class="modal-header">
                 <h2>偏好设置</h2>
                 <button id="closeSettingsBtn" class="icon-btn"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
-                <div id="radarGenreList" class="genre-grid"></div>
+                <h3 class="setting-title">雷达推荐风格</h3>
+                <div id="radarGenreList" class="genre-grid block-layout"></div>
             </div>
-            <div class="modal-footer"><button id="saveSettingsBtn" class="action-btn primary-btn">完成</button></div>
+            <div class="modal-footer"><button id="saveSettingsBtn" class="action-btn primary-btn">保存设置</button></div>
         </div>
     </div>
-    <div id="notification" class="notification"></div>
-    <div id="debugInfo" class="debug-info" style="display:none;"></div>
 
+    <div id="paletteModal" class="modal-overlay glass-overlay" aria-hidden="true">
+        <div class="modal-content glass-effect palette-content">
+            <div class="modal-header">
+                <h2>主题配色 (莫兰迪)</h2>
+                <button id="closePaletteBtn" class="icon-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body theme-grid">
+                <div class="theme-color-item active" style="--t-color: #007AFF;" data-color="#007AFF" title="iOS 蓝"></div>
+                <div class="theme-color-item" style="--t-color: #8C9C90;" data-color="#8C9C90" title="鼠尾草绿"></div>
+                <div class="theme-color-item" style="--t-color: #C1A5A9;" data-color="#C1A5A9" title="灰玫瑰"></div>
+                <div class="theme-color-item" style="--t-color: #929FA8;" data-color="#929FA8" title="烟雨灰"></div>
+                <div class="theme-color-item" style="--t-color: #B4A9C0;" data-color="#B4A9C0" title="丁香紫"></div>
+                <div class="theme-color-item" style="--t-color: #D1BFAe;" data-color="#D1BFAe" title="麦田卡其"></div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer" preload="metadata" playsinline></audio>
+    <div id="notification" class="notification glass-effect"></div>
+    <div id="debugInfo" class="debug-info" style="display:none;"></div>
+    <div style="display:none;" id="albumCover"></div>
     <div style="display:none;">
         <button id="loadOnlineBtn"></button>
         <button id="mobileQueueToggle"></button>
@@ -189,18 +207,109 @@
     
     <script>
     document.addEventListener("DOMContentLoaded", () => {
-        // --- 1. 沉浸式歌词面板控制 ---
+        // --- 1. 莫兰迪主题配色系统 ---
+        const root = document.documentElement;
+        const paletteModal = document.getElementById('paletteModal');
+        const colorItems = document.querySelectorAll('.theme-color-item');
+        
+        document.getElementById('openPaletteBtn').addEventListener('click', () => {
+            paletteModal.removeAttribute('aria-hidden');
+        });
+        document.getElementById('closePaletteBtn').addEventListener('click', () => {
+            paletteModal.setAttribute('aria-hidden', 'true');
+        });
+
+        // 读取本地存储的主题色
+        const savedColor = localStorage.getItem('soxl-custom-color') || '#007AFF';
+        root.style.setProperty('--primary-color', savedColor);
+        colorItems.forEach(item => {
+            if(item.dataset.color === savedColor) item.classList.add('active');
+            else item.classList.remove('active');
+            
+            item.addEventListener('click', (e) => {
+                const color = e.target.dataset.color;
+                root.style.setProperty('--primary-color', color);
+                localStorage.setItem('soxl-custom-color', color);
+                colorItems.forEach(i => i.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+
+        // --- 2. 沉浸式歌词面板控制 (解决透视与拦截问题) ---
         const lyricScreen = document.getElementById("lyricScreen");
+        const lyricBlurBg = document.getElementById("lyricBlurBg");
+        
         document.getElementById("openLyricBtn").addEventListener("click", (e) => {
             if(e.target.closest('.favorite-toggle')) return; 
             lyricScreen.classList.remove("hidden");
+            document.body.style.overflow = 'hidden'; // 防止背部滚动
+            // 提取小封面的图作为大背景进行虚化
+            lyricBlurBg.style.backgroundImage = `url(${document.getElementById('barCoverImg').src})`;
         });
         document.getElementById("closeLyricBtn").addEventListener("click", () => {
             lyricScreen.classList.add("hidden");
+            document.body.style.overflow = '';
         });
 
-        // --- 2. 下拉框行为修复 (点击外部自动关闭) ---
-        const toggleDropdown = (btnId, menuId) => {
+        // --- 3. 封面图同步分离 (大图静态，小图转动) ---
+        const barCoverImg = document.getElementById("barCoverImg");
+        const bigCoverImg = document.getElementById("bigCoverImg");
+        const audio = document.getElementById("audioPlayer");
+
+        // 监听封面变化并同步给大封面和小封面
+        const observer = new MutationObserver(() => {
+            const hiddenImg = document.querySelector("#albumCover img");
+            if (hiddenImg && hiddenImg.src) {
+                barCoverImg.src = hiddenImg.src;
+                bigCoverImg.src = hiddenImg.src;
+                lyricBlurBg.style.backgroundImage = `url(${hiddenImg.src})`;
+            }
+        });
+        const hiddenCoverContainer = document.getElementById("albumCover");
+        if(hiddenCoverContainer) observer.observe(hiddenCoverContainer, { childList: true, subtree: true });
+
+        // 仅让底部小封面旋转
+        const toggleSpin = () => {
+            if(!audio.paused && !audio.ended && audio.src) {
+                barCoverImg.classList.add("spinning");
+            } else {
+                barCoverImg.classList.remove("spinning");
+            }
+        };
+        audio.addEventListener("play", toggleSpin);
+        audio.addEventListener("pause", toggleSpin);
+
+        // --- 4. 【关键修复】逐行歌词绝对居中滚动算法 ---
+        const lyricsContent = document.getElementById('lyricsContent');
+        const lyricsScroll = document.getElementById('lyricsScroll');
+        
+        if (lyricsContent && lyricsScroll) {
+            const scrollLyric = () => {
+                const activeLine = lyricsContent.querySelector('.current') || lyricsContent.querySelector('.active');
+                if (activeLine) {
+                    // 精确计算：将 activeLine 滚动到 scroll container 的垂直中心
+                    const scrollContainerHeight = lyricsScroll.clientHeight;
+                    const activeLineOffsetTop = activeLine.offsetTop;
+                    const activeLineHeight = activeLine.clientHeight;
+                    const targetScrollTop = activeLineOffsetTop - (scrollContainerHeight / 2) + (activeLineHeight / 2);
+                    
+                    lyricsScroll.scrollTo({
+                        top: targetScrollTop,
+                        behavior: 'smooth'
+                    });
+                }
+            };
+
+            // 使用 MutationObserver 监听 class 的跳动
+            const lyricObserver = new MutationObserver(() => { scrollLyric(); });
+            lyricObserver.observe(lyricsContent, { attributes: true, subtree: true, attributeFilter: ['class'] });
+            
+            // 兜底：每秒校准一次滚动位置
+            setInterval(scrollLyric, 1000);
+        }
+
+        // --- 5. 下拉菜单绝对防遮挡控制 ---
+        const setupDropdown = (btnId, menuId) => {
             const btn = document.getElementById(btnId);
             const menu = document.getElementById(menuId);
             if(!btn || !menu) return;
@@ -212,66 +321,12 @@
                 menu.classList.toggle('show');
             });
         };
-        toggleDropdown("sourceSelectButton", "sourceMenu");
-        toggleDropdown("qualityToggle", "playerQualityMenu");
+        setupDropdown("sourceSelectButton", "sourceMenu");
+        setupDropdown("qualityToggle", "playerQualityMenu");
         
-        document.addEventListener('click', (e) => {
-            if(!e.target.closest('.dropdown-wrapper')) {
-                document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('show'));
-            }
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('show'));
         });
-
-        // --- 3. 封面旋转动画同步 ---
-        const albumCover = document.getElementById("albumCover");
-        const barCoverImg = document.getElementById("barCoverImg");
-        const audio = document.getElementById("audioPlayer");
-
-        const observer = new MutationObserver(() => {
-            const img = albumCover.querySelector("img");
-            if (img && img.src) barCoverImg.src = img.src;
-        });
-        observer.observe(albumCover, { childList: true, subtree: true });
-
-        const toggleSpin = () => {
-            if(!audio.paused && !audio.ended && audio.src) {
-                albumCover.classList.add("spinning");
-                barCoverImg.classList.add("spinning");
-            } else {
-                albumCover.classList.remove("spinning");
-                barCoverImg.classList.remove("spinning");
-            }
-        };
-        audio.addEventListener("play", toggleSpin);
-        audio.addEventListener("pause", toggleSpin);
-
-        // --- 4. 【关键修复】逐行歌词自动跟随滚动 ---
-        const lyricsContent = document.getElementById('lyricsContent');
-        const lyricsScroll = document.getElementById('lyricsScroll');
-        
-        if (lyricsContent && lyricsScroll) {
-            // 监听歌词容器内部 DOM class 的变化
-            const lyricObserver = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.attributeName === 'class') {
-                        const target = mutation.target;
-                        // 找到被加上高亮类的当前歌词行（原代码可能用 current 或 active）
-                        if (target.classList.contains('current') || target.classList.contains('active')) {
-                            // 核心：平滑滚动到屏幕中心
-                            target.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'center'
-                            });
-                        }
-                    }
-                });
-            });
-            // 监听所有子元素（即每一行歌词）的属性变化
-            lyricObserver.observe(lyricsContent, {
-                attributes: true,
-                subtree: true,
-                attributeFilter: ['class']
-            });
-        }
     });
     </script>
 </body>
